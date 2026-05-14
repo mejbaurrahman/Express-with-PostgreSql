@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express, {
   type Application,
   type Request,
@@ -7,14 +8,13 @@ import express, {
 import { Pool } from "pg";
 const app: Application = express();
 const PORT = 5000;
-
+dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
 
 const pool = new Pool({
-  connectionString:
-    "postgresql://neondb_owner:npg_pSRn7Qr4MmXE@ep-hidden-shape-aqrvtdnu-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+  connectionString: process.env.URI,
 });
 
 const initDB = async () => {
@@ -80,6 +80,28 @@ app.get("/api/users", async (req: Request, res: Response) => {
     });
   }
 });
+app.get("/api/users/:id", async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [
+      req.params.id,
+    ]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    res.status(200).json({
+      message: "User retrieved successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unknown error",
+      error: error,
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
