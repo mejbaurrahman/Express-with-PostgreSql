@@ -6,15 +6,16 @@ import express, {
 } from "express";
 
 import { Pool } from "pg";
+import { config } from "./config";
 const app: Application = express();
-const PORT = 5000;
+const PORT = config.port;
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
 
 const pool = new Pool({
-  connectionString: process.env.URI,
+  connectionString: config.db,
 });
 
 const initDB = async () => {
