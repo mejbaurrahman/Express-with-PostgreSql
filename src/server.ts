@@ -9,4 +9,4 @@ const main = () => {
   });
 };
 
-main;
+main();
