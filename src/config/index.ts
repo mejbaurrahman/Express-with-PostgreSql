@@ -8,4 +8,5 @@ dotenv.config({
 export const config = {
   port: process.env.PORT || 5000,
   db: process.env.URI as string,
+  jwt_secret_key: process.env.JWT_SECRET_KEY as string,
 };
