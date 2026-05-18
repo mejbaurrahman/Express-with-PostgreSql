@@ -27,8 +27,11 @@ const loginUserIntoDB = async (payload: {
   // Generate a simple token (in a real application, you would use a more secure method)
   //
   const jwtPayload = {
+    id: user.id,
+    name: user.name,
     userId: user.id,
     email: user.email,
+    role: user.role,
     is_active: user.is_active,
   };
 
