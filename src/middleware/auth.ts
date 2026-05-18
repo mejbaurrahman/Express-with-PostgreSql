@@ -2,8 +2,9 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import type { NextFunction, Request, Response } from "express";
 import { config } from "../config";
 import { pool } from "../db";
+import type { ROLES } from "../types";
 
-const auth = (...roles: any) => {
+const auth = (...roles: ROLES[]) => {
   console.log("Roles: ", roles);
   return async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -7,6 +7,13 @@ const loginUser = async (req: Request, res: Response) => {
       email: req.body.email,
       password: req.body.password,
     });
+
+    const { accessToken, refreshToken } = result;
+    res.cookie("refreshToken", refreshToken, {
+      secure: false, // in production, set this to true to ensure the cookie is only sent over HTTPS
+      httpOnly: true,
+      sameSite: "lax", // adjust this based on your needs (e.g., "lax" or "none")
+    });
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
@@ -22,6 +29,8 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+const refreshToken = async (req: Request, res: Response) => {};
 export const authController = {
   loginUser,
+  refreshToken,
 };
